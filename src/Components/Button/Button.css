@@ -1,0 +1,11 @@
+button {
+    padding: 20px 100px;
+    font-weight: bold;
+    border: 0;
+    font-size: 18px;
+}
+
+.Facebook {
+    background: #3B5998;
+    color: white;
+}

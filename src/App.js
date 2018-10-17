@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-import firebase from './config/firebase';
-import Map from './Components/Map'
+import Routes from './config/routes'
+// import Map from './Components/Map'
 
 class App extends Component {
 
   state = {
     lat: 0,
-    lng: 0
+    lng: 0, 
+    displayName: ""
   }
   setPosition = () => {
     navigator.geolocation.getCurrentPosition((data) => {
@@ -36,22 +36,16 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-        </header>
-        {/* AIzaSyDfwTE7dOzHOiYsboRp-iAl72nskOS_FsM */}
-        <Map 
+        <Routes />
+        {/* <Map 
         isMarkerShown={true}
-        googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-DFqmoDxeJOilR96Key3WEVFYKk__AX4"
+        googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfwTE7dOzHOiYsboRp-iAl72nskOS_FsM"
         loadingElement={<div style={{ height: `100%` }} />}
         containerElement={<div style={{ height: `400px` }} />}
         mapElement={<div style={{ height: `100%` }} />}
         position={{lat: this.state.lat, lng: this.state.lng}}
         updatePosition={this.updatePosition}
-        />
+        /> */}
       </div>
     );
   }

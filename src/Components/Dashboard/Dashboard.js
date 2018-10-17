@@ -238,7 +238,8 @@ class UserData extends Component {
     componentDidMount() {
         firestore.collection("user").doc(this.props.user.uid).get()
             .then(snapshot => {
-                if(snapshot.docs) {
+                console.log(snapshot.exists)
+                if(snapshot.exists === true) {
                     const data = snapshot.docs;
                     console.log(data)
                     this.setState({ mainPage: true, data })

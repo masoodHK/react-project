@@ -46,10 +46,18 @@ input[type=number] {
     background: #0000004d;
     margin: 3% -30px;
 }
+
 .option > span {
     margin: 2%;
 }
 #section-4 > div> div {
     position: relative !important;
     margin: 6% 0;
+}
+
+.meeting {
+    text-align: left;
+    padding: 2% 4%;
+    background: #0000004d;
+    margin: 3% -30px;
 }

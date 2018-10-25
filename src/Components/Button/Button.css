@@ -9,3 +9,7 @@ button {
     background: #3B5998;
     color: white;
 }
+
+.card-button {
+    padding: 20px;
+}

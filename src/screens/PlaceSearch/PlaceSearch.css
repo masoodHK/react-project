@@ -1,0 +1,19 @@
+#location-picker button {
+    padding: 10px;
+}
+
+#location-picker input {
+    width: 70%;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2% 4%;
+    color: white;
+    font-size: 16px;
+    border: 0;
+}
+
+#location-picker > .location {
+    text-align: left;
+    padding: 2% 4%;
+    background: #0000004d;
+    margin: 3% 20px;
+}

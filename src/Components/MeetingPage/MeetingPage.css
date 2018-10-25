@@ -1,0 +1,13 @@
+#cards > div > div > div {
+    background: #303030
+}
+
+#cards > div > div > div >img {
+    width: 86%;
+}
+
+#bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around
+}

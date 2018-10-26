@@ -5,6 +5,7 @@ import PickyDateTime from 'react-picky-date-time';
 import Button from '../../Components/Button/Button'
 import firebase from '../../config/firebase';
 import swal from 'sweetalert2';
+import MapReact from '../../Components/MapReact';
 
 import './PlaceSearch.css'
 
@@ -17,7 +18,10 @@ export default class PlaceSearch extends Component {
         searchData: [],
         selectedDate: "",
         selectedLocation: "",
-        ll: ``
+        ll: ``,
+        showDirections: false,
+        currentLocation: {},
+        destination: {}
     }
     componentDidMount = () => {
         navigator.geolocation.getCurrentPosition(data => {
@@ -25,7 +29,11 @@ export default class PlaceSearch extends Component {
             console.log(URL);
             axios.get(URL).then(result => {
                 console.log(result.data.response.groups[0].items);
-                this.setState({data: result.data.response.groups[0].items, ll: `${data.coords.latitude},${data.coords.longitude}`})
+                this.setState({
+                    data: result.data.response.groups[0].items,
+                    ll: `${data.coords.latitude},${data.coords.longitude}`,
+                    currentLocation: data.coords
+                })
             }).catch(error => {
                 console.log(error)
             })
@@ -77,6 +85,8 @@ export default class PlaceSearch extends Component {
                     .collection('meetings')
                     .doc().set({
                         meetingWith: this.props.location.state.name,
+                        setBy: firebase.auth().currentUser.displayName,
+                        userID: this.props.location.state.userID,
                         date: this.state.selectedDate,
                         location: this.state.selectedLocation
                     }).then(res => {
@@ -86,40 +96,59 @@ export default class PlaceSearch extends Component {
             }
         })
     }
+
+    showDirections = (destination) => {
+        console.log(destination)
+        this.setState({showDirections: true, destination})
+    }
+
+    goBack = () => {
+        this.setState({showDirections: false, destination: {}})
+    }
     
     render() {
         console.log(this.props)
-        const { data, searchData, searchQuery } = this.state
+        const { data, searchData, searchQuery, showDirections } = this.state
         return (
-            <div id="location-picker">
-                <h1>Pick the location and time for the meeting</h1>
-                <input onChange={event => this.handleSearch(event)} value={searchQuery}/>
-                <Button onClick={this.searchResult}>Search</Button>
-                {searchData.length === 0 ?
-                    data.map(locations => {
-                        return <div className="location" key={locations.venue.id}>
-                            <h3>{locations.venue.name}</h3>
-                            <p>{locations.venue.location.formattedAddress.join(" ")}</p>
-                            <Button className="selction" onClick={() => this.pickLocation(locations.venue.name)}>Pick Location</Button>
-                        </div>
-                    }) :
-                    searchData.map(locations => {
-                        return <div className="location" key={locations.id}>
-                            <h3>{locations.name}</h3>
-                            <p>{locations.location.formattedAddress.join(" ")}</p>
-                            <Button className="selction" onClick={() => this.pickLocation(locations.name)}>Pick Location</Button>
-                        </div>
-                    })
-                }
-                <h2>Pick the time</h2>
-                <PickyDateTime
-                    size="m"
-                    mode={0}
-                    locale="en-us"
-                    show={true}
-                    onDatePicked={res => this.onDatePicked(res)}
-                />
-                <Button onClick={this.saveSelection}>Select Date</Button>
+            <div>
+                {!showDirections ? 
+                <div id="location-picker">
+                    <h1>Pick the location and time for the meeting</h1>
+                    <input onChange={event => this.handleSearch(event)} value={searchQuery}/>
+                    <Button onClick={this.searchResult}>Search</Button>
+                    {searchData.length === 0 ?
+                        data.map(locations => {
+                            return <div className="location" key={locations.venue.id}>
+                                <h3>{locations.venue.name}</h3>
+                                <p>{locations.venue.location.formattedAddress.join(", ")}</p>
+                                <Button className="selction" onClick={() => this.pickLocation(locations.venue.name)}>Pick Location</Button>
+                                <Button className="selction" onClick={() => this.showDirections(locations.venue.location)}>Show Directions</Button>
+                            </div>
+                        }) :
+                        searchData.map(locations => {
+                            return <div className="location" key={locations.id}>
+                                <h3>{locations.name}</h3>
+                                <p>{locations.location.formattedAddress.join(", ")}</p>
+                                <Button className="selction" onClick={() => this.pickLocation(locations.name)}>Pick Location</Button>
+                                <Button className="selction" onClick={() => this.showDirections(locations.location)}>Show Directions</Button>
+                            </div>
+                        })
+                    }
+                    <h2>Pick the time</h2>
+                    <PickyDateTime
+                        size="l"
+                        mode={0}
+                        locale="en-us"
+                        show={true}
+                        onDatePicked={res => this.onDatePicked(res)}
+                    />
+                    <Button onClick={this.saveSelection}>Select Date</Button>
+                </div> : 
+                <div id="directions">
+                    <h2>Directions</h2>
+                    <MapReact showDirections={true} destination={this.state.destination}/>
+                    <Button onClick={this.goBack}>Back</Button>
+                </div> }
             </div>
         )
     }

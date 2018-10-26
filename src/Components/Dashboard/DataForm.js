@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import Button from '../Button/Button'
 import placeholder from '../../assets/placeholder.png';
-import Map from '../Map';
 import firebase from '../../config/firebase'
+import MapReact from '../MapReact';
 
 const storage = firebase.storage();
 const firestore = firebase.firestore();
@@ -217,7 +217,7 @@ export default class DataForm extends Component {
                         <Button onClick={() => this.setState({ section_3: false, section_4: true})}>Next</Button>
                     </div>}
                     {section_4 && <div id="section-4">
-                        <Map handle={this.handleLocation} />
+                        <MapReact handle={this.handleLocation} setLocation={true}/>
                         <Button onClick={this.submit}>Submit</Button>
                     </div>}
             </div>

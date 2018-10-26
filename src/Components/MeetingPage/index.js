@@ -12,7 +12,8 @@ firestore.settings({ timestampsInSnapshots: true });
 
 export default class MeetingPage extends Component {
 
-    action = (method, name=null) => {
+    action = (method, name=null, userID=null) => {
+        console.log(userID)
         switch (method) {
             case "swipe right":
                 Swal2({
@@ -26,7 +27,8 @@ export default class MeetingPage extends Component {
                         this.props.history.push({
                             pathname:'/set-location',
                             state: {
-                                name: name
+                                name,
+                                userID
                             }
                         });
                     }
@@ -41,7 +43,8 @@ export default class MeetingPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: [],
+            dataID: []
         }
     }
 
@@ -53,7 +56,7 @@ export default class MeetingPage extends Component {
     }
 
     componentDidMount = () => {
-        const { data } = this.state
+        const { data, dataID } = this.state
         let userData = {}
         firestore.collection('user').get()
             .then(users => {
@@ -63,10 +66,10 @@ export default class MeetingPage extends Component {
                     }
                     else {
                         data.push(user.data());
+                        console.log(user.id)
+                        dataID.push(user.id);
                     }
-                })
-                console.log(data)
-                
+                })                
                 const filteredData = data.filter(user => (this.compare(user.typeOfDrinks.sort(), userData.typeOfDrinks.sort()) || (this.compare(user.timeInMinutes.sort(), userData.timeInMinutes.sort()))))
                 console.log(filteredData)
                 this.setState({data: filteredData})
@@ -77,13 +80,13 @@ export default class MeetingPage extends Component {
     }
     
     render() {
-        const { data } = this.state
+        const { data,dataID } = this.state
         console.log(this.props)
         return (
             <div id="cards">
                 <Cards size={[450, 550]} cardSize={[450, 550]} onEnd={() => this.action('end')} className="meeting-card">
-                    {data.map(item =>
-                    <Card key={item} className="meeting-card"
+                    {data.map((item, index) =>
+                    <Card key={dataID[index]} className="meeting-card"
                         onSwipeLeft={() => this.action('swipe left')}
                         onSwipeRight={() => this.action('swipe right')}>
                         <img src={item.imageUrls ? item.imageUrls[0]: placeholder} alt="Display"/>
@@ -93,7 +96,7 @@ export default class MeetingPage extends Component {
                                 <h2>{item.displayName}</h2>
                                 <p>{item.nickname}</p>
                             </div>
-                            <Button className="card-button" onClick={() => this.action('swipe right', item.displayName)}>Accept</Button>
+                            <Button className="card-button" onClick={() => this.action('swipe right', item.displayName, dataID[index])}>Accept</Button>
                         </div>
                     </Card>
                     )}

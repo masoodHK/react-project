@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Button from '../Button/Button'
+import Button from '../Button'
 import placeholder from '../../assets/placeholder.png';
 import firebase from '../../config/firebase'
 import MapReact from '../MapReact';

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import firebase from '../../config/firebase'
 import './Dashboard.css';
 import UserData from './UserData';
+import Button from '../Button'
+
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
@@ -34,6 +36,7 @@ export default class Dashboard extends Component {
         return (
             <div>
                 {this.state.isLoggedIn && <UserData user={this.state.user} router={this.props}/>}
+                <Button>Edit Profile</Button>
             </div>
         )
     }

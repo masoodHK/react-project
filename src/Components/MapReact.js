@@ -5,9 +5,11 @@ import React, { Component } from 'react'
 
 import swal from 'sweetalert2'
 
-import { withGoogleMap, GoogleMap, Marker, DirectionsRenderer, withScriptjs, } from "react-google-maps"
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, DirectionsRenderer } from "react-google-maps"
 
-const Map = withScriptjs(withGoogleMap((props) => <GoogleMap defaultZoom={14} center={props.position}>
+const Map = withScriptjs(withGoogleMap((props) => <GoogleMap
+    defaultZoom={14} center={props.position}
+    googleMapUrl="">
     <Marker
         position={props.position}
         draggable={props.setLocation}
@@ -78,16 +80,16 @@ class MapReact extends Component {
     }
     render() {
         return (
-            <Map containerElement={<div style={{
-                width: "90vw",
-                height: "60vh"
-
-            }}></div>}
+            <Map 
+                loadingElement={<div style={{ height: `100%` }} />}
+                googleMapUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfwTE7dOzHOiYsboRp-iAl72nskOS_FsM"
+                containerElement={<div style={{
+                    width: "90vw",
+                    height: "60vh"
+                }}></div>}
                 mapElement={<div style={{
                     height: `100%`
                 }}></div>}
-                loadingElement={<div style={{ height: `100%` }} />}
-                googleMapUrl="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfwTE7dOzHOiYsboRp-iAl72nskOS_FsM"
                 position={this.state.position}
                 showDirections={this.props.showDirections}
                 setLocation={this.props.setLocation}

@@ -22,7 +22,7 @@ export default class Dashboard extends Component {
                 this.setState({ isLoggedIn: true, user })
             }
             else {
-                this.props.history.go("/");
+                this.props.history.push("/");
             }
         });
     }
@@ -33,10 +33,11 @@ export default class Dashboard extends Component {
     }
     
     render() {
+        console.log(this.props)
         return (
             <div>
                 {this.state.isLoggedIn && <UserData user={this.state.user} router={this.props}/>}
-                <Button>Edit Profile</Button>
+                <Button onClick={() => this.props.history.push("/edit-profile")}>Edit Profile</Button>
             </div>
         )
     }

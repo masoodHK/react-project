@@ -3,7 +3,6 @@ import Button from "../Button";
 import firebase from "../../config/firebase";
 import { connect } from "react-redux";
 import { authActions } from "../../store/actions";
-import reducers from "../../store/reducers";
 
 class Login extends Component {
   login = () => {
@@ -12,8 +11,8 @@ class Login extends Component {
       .signInWithPopup(new firebase.auth.FacebookAuthProvider())
       .then(data => {
         console.log(data, this.props.history);
-        this.props.updateUser(data);
-        this.props.history.replace("/dashboard");
+        this.props.updateUser(data.user);
+        this.props.history.push("/dashboard");
       })
       .catch(error => {
         console.log(error);

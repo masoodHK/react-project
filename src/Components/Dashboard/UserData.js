@@ -22,7 +22,6 @@ export default class UserData extends Component {
             .then(snapshot => {
                 console.log(snapshot.exists)
                 if(snapshot.exists === true) {
-                    console.log(snapshot.data())
                     this.setState({ mainPage: true, data: snapshot.data() })
                 }
                 else {

@@ -29,20 +29,18 @@ export class MapContainer extends Component {
     const directionRenderer = new this.props.google.maps.DirectionsService();
     const origin = new this.props.google.maps.LatLng(this.state.position.lat, this.state.position.lng)
     const destination = new this.props.google.maps.LatLng(this.props.destination.lat, this.props.destination.lng)
-    console.log(directionRenderer)
-    console.log(this.props.destination.lat)
-    console.log(this.props.destination.lng)
-    
-    console.log(origin);
-    console.log(destination);
+    const directionsDisplay = new this.props.google.maps.DirectionsRenderer();
+
     
     directionRenderer.route({
-      origin: new this.props.google.maps.LatLng(24.8812296, 67.0727269),
-      destination: new this.props.google.maps.LatLng(24.8861479, 67.0595196),
+      origin,
+      destination,
       travelMode: this.props.google.maps.TravelMode.DRIVING
     }, (result, status) => {
-      console.log(result)
-      console.log(status)
+      console.log(result, status)
+      if (status === 'OK') {
+        directionsDisplay.setDirections(result);
+      }  
     })
   }
 

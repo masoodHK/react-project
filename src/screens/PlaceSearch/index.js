@@ -5,8 +5,7 @@ import PickyDateTime from "react-picky-date-time";
 import Button from "../../Components/Button";
 import firebase from "../../config/firebase";
 import swal from "sweetalert2";
-import MapReact from "../../Components/MapReact";
-
+import Map from "../../Components/Map";
 import "./PlaceSearch.css";
 
 const firestore = firebase.firestore();
@@ -17,6 +16,7 @@ export default class PlaceSearch extends Component {
     data: [],
     searchData: [],
     selectedDate: "",
+    selectedTime: "",
     selectedLocation: "",
     ll: ``,
     showDirections: false,
@@ -28,7 +28,6 @@ export default class PlaceSearch extends Component {
       const URL = `https://api.foursquare.com/v2/venues/explore?client_id=${FOURSQUARE_API_ID}&client_secret=${FOURSQUARE_API_SECRET}&limit=3&v=20180323&ll=${
         data.coords.latitude
       },${data.coords.longitude}`;
-      console.log(URL);
       axios
         .get(URL)
         .then(result => {
@@ -49,6 +48,9 @@ export default class PlaceSearch extends Component {
     let formattedDate = `${date.date}/${date.month}/${date.year}`;
     console.log(date);
     this.setState({ selectedDate: formattedDate });
+  };
+  onTimePicked = time => {
+    console.log(time);
   };
 
   searchResult = () => {
@@ -95,9 +97,11 @@ export default class PlaceSearch extends Component {
           .set({
             meetingWith: this.props.location.state.name,
             setBy: firebase.auth().currentUser.displayName,
+            setterID: firebase.auth().currentUser.uid,
             userID: this.props.location.state.userID,
             date: this.state.selectedDate,
-            location: this.state.selectedLocation
+            location: this.state.selectedLocation,
+            status: "Pending"
           })
           .then(res => {
             console.log(res);
@@ -106,6 +110,8 @@ export default class PlaceSearch extends Component {
       }
     });
   };
+
+
 
   showDirections = destination => {
     console.log(destination);
@@ -177,17 +183,21 @@ export default class PlaceSearch extends Component {
             <h2>Pick the time</h2>
             <PickyDateTime
               size="l"
-              mode={0}
+              mode={1}
               locale="en-us"
               show={true}
               onDatePicked={res => this.onDatePicked(res)}
+              onSecondChange={res => this.onTimePicked(res)}
+              onMinuteChange={res => this.onTimePicked(res)}
+              onHourChange={res => this.onTimePicked(res)}
+              onMeridiemChange={res => this.onTimePicked(res)}
             />
             <Button onClick={this.saveSelection}>Select Date</Button>
           </div>
         ) : (
           <div id="directions">
             <h2>Directions</h2>
-            <MapReact
+            <Map
               showDirections={true}
               destination={this.state.destination}
             />

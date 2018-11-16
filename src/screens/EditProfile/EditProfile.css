@@ -1,0 +1,12 @@
+#form > label {
+    display: block;
+    margin: 3% 0;
+}
+#form > label input {
+    width: 90%;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 4% 8%;
+    color: white;
+    font-size: 16px;
+    border: 0;
+}

@@ -17,3 +17,8 @@
     background: #0000004d;
     margin: 3% 20px;
 }
+
+#directions > div > div {
+    position: relative !important;
+    margin: 6% 0;
+}

@@ -67,7 +67,9 @@ class EditProfile extends Component {
 
     save = () => {
         this.props.updateUser(this.state.user);
-        this.props.history.go('/dashboard')
+        firestore.collection('user').doc(firebase.auth().currentUser.uid).update(this.state.user).then(() => {
+            this.props.history.go('/dashboard')
+        })
     }
     render() {
         const { user } = this.state

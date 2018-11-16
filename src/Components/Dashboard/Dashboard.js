@@ -38,6 +38,7 @@ export default class Dashboard extends Component {
             <div>
                 {this.state.isLoggedIn && <UserData user={this.state.user} router={this.props}/>}
                 <Button onClick={() => this.props.history.push("/edit-profile")}>Edit Profile</Button>
+                <Button onClick={() => this.props.history.push("/all-meetings")}>All Meetings</Button>
             </div>
         )
     }

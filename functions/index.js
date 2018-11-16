@@ -20,5 +20,8 @@ exports.sendMeetingRequest = functions.firestore.document('user/{userID}/meeting
         time: data.time,
         location: data.location,
         status: data.status,
+        userDisplayPic: data.userDisplayPic,
+        userID,
+        senderDisplayPic: data.senderDisplayPic,
     })
 })

@@ -4,6 +4,7 @@ import Button from "../Button";
 import swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
 import Ratings from '../../Components/Ratings'
+import * as moment from 'moment'
 
 const firestore = firebase.firestore();
 firestore.settings({ timestampsInSnapshots: true });
@@ -15,9 +16,6 @@ export default class Meeting extends Component {
 
 		this.state = {
 			meetings: [],
-			cancelledMeetings: [],
-			doneMeetings: [],
-			rejectedMeetings: [],
 			ratings: 0
 		};
 	}
@@ -40,7 +38,7 @@ export default class Meeting extends Component {
 				} else {
 					meetingSnapshot.forEach(meeting => {
 						console.log(meeting.id);
-						if (meeting.data().status === "done") {
+						if (meeting.data().date === moment().format("MM-DD-YYYY") && meeting.data().time === moment().format("HH:mm A")) {
 							swal({
 								title: `Your meeting with ${meeting.data().meetingWith} is done. Did it happened?`,
 								text: "Can you confirm it",

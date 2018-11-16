@@ -11,7 +11,7 @@ const firestore = firebase.firestore();
 firestore.settings({ timestampsInSnapshots: true });
 
 export default class MeetingPage extends Component {
-  action = (method, name = null, userID = null) => {
+  action = (method, name = null, userID = null, imageUrl = null) => {
     console.log(userID);
     switch (method) {
       case "swipe right":
@@ -27,7 +27,8 @@ export default class MeetingPage extends Component {
               pathname: "/set-location",
               state: {
                 name,
-                userID
+                userID,
+                imageUrl
               }
             });
           }
@@ -127,7 +128,7 @@ export default class MeetingPage extends Component {
                 <Button
                   className="card-button"
                   onClick={() =>
-                    this.action("swipe right", item.displayName, dataID[index])
+                    this.action("swipe right", item.displayName, dataID[index], item.imageUrls[0])
                   }
                 >
                   Accept

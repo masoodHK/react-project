@@ -6,6 +6,7 @@ import Button from "../../Components/Button";
 import firebase from "../../config/firebase";
 import swal from "sweetalert2";
 import Map from "../../Components/Map";
+import * as moment from 'moment';
 import "./PlaceSearch.css";
 
 const firestore = firebase.firestore();
@@ -17,6 +18,11 @@ export default class PlaceSearch extends Component {
     searchData: [],
     selectedDate: "",
     selectedTime: "",
+    hour: "",
+    duration: "",
+    minute: "",
+    second: "",
+    meridian: "",
     selectedLocation: "",
     ll: ``,
     showDirections: false,
@@ -45,12 +51,25 @@ export default class PlaceSearch extends Component {
   };
 
   onDatePicked = date => {
-    let formattedDate = `${date.date}/${date.month}/${date.year}`;
+    let formattedDate = `${date.date}-${date.month}-${date.year}`;
     console.log(date);
     this.setState({ selectedDate: formattedDate });
   };
-  onTimePicked = time => {
-    console.log(time);
+  onSecondPicked = time => {
+    console.log(time.value);
+    this.setState({second: time.value})
+  };
+  onMinutePicked = time => {
+    console.log(time.value);
+    this.setState({minute: time.value})
+  };
+  onHourPicked = time => {
+    console.log(time.value);
+    this.setState({hour: time.value})
+  };
+  onMeridianPicked = time => {
+    console.log(time.value);
+    this.setState({meridian: time.value})
   };
 
   searchResult = () => {
@@ -99,9 +118,12 @@ export default class PlaceSearch extends Component {
             setBy: firebase.auth().currentUser.displayName,
             setterID: firebase.auth().currentUser.uid,
             userID: this.props.location.state.userID,
-            date: this.state.selectedDate,
+            date: moment(this.state.selectedDate, "DD-MM-YYYY").format("MM-DD-YYYY"),
+            time: moment(`${this.state.hour}:${this.state.minute}:${this.state.second} ${this.state.meridian}`, "HH:mm:ss A").format("HH:mm A"),
             location: this.state.selectedLocation,
-            status: "Pending"
+            status: "pending",
+            userDisplayPic: this.props.location.imageUrl,
+            senderDisplayPic: firebase.auth().currentUser.photoURL,
           })
           .then(res => {
             console.log(res);
@@ -192,6 +214,10 @@ export default class PlaceSearch extends Component {
               onHourChange={res => this.onTimePicked(res)}
               onMeridiemChange={res => this.onTimePicked(res)}
             />
+            <p>
+              Enter the duration
+              <input name="duration" value={this.state.duration} onChange={event => this.setState({[event.target.name]: event.target.value})}/>
+            </p>
             <Button onClick={this.saveSelection}>Select Date</Button>
           </div>
         ) : (
